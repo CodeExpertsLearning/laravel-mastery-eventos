@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Rotas para Home e Single do site de Eventos
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/eventos/{slug}', [\App\Http\Controllers\HomeController::class, 'show'])->name('event.single');
+
 
 Route::get('/queries/{event?}', function($event = null){
 //    $events = \App\Models\Event::all(); //select * from events
@@ -83,7 +84,28 @@ Route::get('/hello-world', [\App\Http\Controllers\HelloWorldController::class, '
 Route::get('/hello/{name?}', [\App\Http\Controllers\HelloWorldController::class, 'hello']);
 
 //Rotas CRUD base da base para eventos...
-Route::get('/events/index', [\App\Http\Controllers\EventController::class, 'index']);
-Route::get('/events/store', [\App\Http\Controllers\EventController::class, 'store']);
-Route::get('/events/update/{event}', [\App\Http\Controllers\EventController::class, 'update']);
-Route::get('/events/destroy/{event}', [\App\Http\Controllers\EventController::class, 'destroy']);
+
+Route::prefix('/admin')->name('admin.')->group(function() {
+
+    Route::prefix('/events')->name('events.')->group(function(){
+
+        Route::get('/', [\App\Http\Controllers\Admin\EventController::class, 'index'])->name('index');
+
+        Route::get('/create', [\App\Http\Controllers\Admin\EventController::class, 'create'])->name('create');
+        Route::post('/store', [\App\Http\Controllers\Admin\EventController::class, 'store'])->name('store');
+
+        Route::get('/{event}/edit', [\App\Http\Controllers\Admin\EventController::class, 'edit'])->name('edit');
+        Route::post('/update/{event}', [\App\Http\Controllers\Admin\EventController::class, 'update'])->name('update');
+
+        Route::get('/destroy/{event}', [\App\Http\Controllers\Admin\EventController::class, 'destroy'])->name('destroy');
+
+    });
+});
+
+
+//GET | POST | PUT | DELETE | OPTIONS | HEAD
+//Route::get(), Route::post(), Route::put(), Route::delete() ...
+//any a qualquer verbo ou match
+//Route::any('/teste-any', fn() => 'Rota Any'); //match com qualquer verbo, sendo um dos verbos permitidos acima
+//para fazer match com post e put
+//Route::match(['post', 'put'], '/teste-match', fn() => 'Rota Match');

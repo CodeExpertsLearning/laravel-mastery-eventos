@@ -11,6 +11,8 @@ class Event extends Model
 
     protected $fillable = ['title',  'description', 'body', 'slug', 'start_event'];
 
+    protected $dates = ['start_event'];
+
     public function photos()
     {
         return $this->hasMany(Photo::class); //event_id
