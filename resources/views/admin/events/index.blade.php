@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-12 d-flex justify-content-between align-items-center my-5">
             <h2>Meus Eventos</h2>
-            <a href="{{route('admin.events.index')}}" class="btn btn-success">Criar Evento</a>
+            <a href="{{route('admin.events.create')}}" class="btn btn-success">Criar Evento</a>
         </div>
 
         <div class="col-12">
