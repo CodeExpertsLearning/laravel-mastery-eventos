@@ -6,14 +6,27 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use App\Http\Requests\EventRequest;
 
 class EventController extends Controller
 {
+    private $event;
+
+    public function __construct(Event $event)
+    {
+        $this->event = $event;
+    }
+
     public function index()
     {
-        $events = Event::paginate(10);
+        $events = $this->event->paginate(10);
 
         return view('admin.events.index', compact('events'));
+    }
+
+    public function show($event)
+    {
+        return 'Evento: ' . $event;
     }
 
     public function create()
@@ -21,26 +34,26 @@ class EventController extends Controller
         return view('admin.events.create');
     }
 
-    public function store(Request $request)
+    public function store(EventRequest $request)
     {
         $event = $request->all();
         $event['slug'] = Str::slug($event['title']);
 
-        Event::create($event);
+        $this->event->create($event);
 
         return redirect()->route('admin.events.index');
     }
 
     public function edit($event)
     {
-        $event = Event::findOrFail($event);
+        $event = $this->event->findOrFail($event);
 
         return view('admin.events.edit', compact('event'));
     }
 
-    public function update($event, Request $request)
+    public function update($event, EventRequest $request)
     {
-        $event = Event::findOrFail($event);
+        $event = $this->event->findOrFail($event);
 
         $event->update($request->all());
 
@@ -49,7 +62,7 @@ class EventController extends Controller
 
     public function destroy($event)
     {
-        $event = Event::findOrFail($event);
+        $event = $this->event->findOrFail($event);
         $event->delete();
 
         return redirect()->route('admin.events.index');
