@@ -11,7 +11,7 @@
     <link rel="canonical" href="http://127.0.0.1:8000">
 
     <!-- Bootstrap core CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{asset('css/app.css')}}" rel="stylesheet">
 
     <meta name="msapplication-config" content="/docs/4.5/assets/img/favicons/browserconfig.xml">
     <meta name="theme-color" content="#563d7c">
@@ -150,7 +150,13 @@
     </button>
     <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#">Sair</a>
+            <a class="nav-link" href="#" onclick="
+                            event.preventDefault();
+                            document.getElementById('logout').submit()">Sair</a>
+
+            <form action="{{route('logout')}}" method="post" id="logout">
+                @csrf
+            </form>
         </li>
     </ul>
 </nav>
@@ -179,11 +185,7 @@
         </main>
     </div>
 </div>
-<script
-    src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-    crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="{{asset('js/app.js')}}"></script>
 
 </body>
 </html>

@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
        return $this->hasOne(Profile::class); // automaticamente procura por esta coluna: user_id, em profiles
     }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'owner_id');
+    }
 }

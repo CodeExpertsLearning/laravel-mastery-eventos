@@ -84,8 +84,7 @@ Route::get('/hello-world', [\App\Http\Controllers\HelloWorldController::class, '
 Route::get('/hello/{name?}', [\App\Http\Controllers\HelloWorldController::class, 'hello']);
 
 //Rotas CRUD base da base para eventos...
-
-Route::prefix('/admin')->name('admin.')->group(function() {
+Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function() {
 
 //    Route::prefix('/events')->name('events.')->group(function(){
 //
@@ -123,3 +122,7 @@ Route::prefix('/admin')->name('admin.')->group(function() {
 //Route::any('/teste-any', fn() => 'Rota Any'); //match com qualquer verbo, sendo um dos verbos permitidos acima
 //para fazer match com post e put
 //Route::match(['post', 'put'], '/teste-match', fn() => 'Rota Match');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
