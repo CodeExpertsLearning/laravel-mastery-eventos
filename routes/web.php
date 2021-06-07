@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Rotas para Home e Single do site de Eventos
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/eventos/{slug}', [\App\Http\Controllers\HomeController::class, 'show'])->name('event.single');
 
 
@@ -100,7 +100,16 @@ Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function() {
 //
 //    });
 
+//Exemplo de rotas do resource com middleware e sem middleware combinando only e except
+
+//    Route::resource('events', \App\Http\Controllers\Admin\EventController::class)->except(['edit', 'update']);
+//
+//    Route::resource('events', \App\Http\Controllers\Admin\EventController::class)
+//        ->only(['edit', 'update'])
+//         ->middleware('user.can.event.edit');
+
     Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
+
     Route::resource('events.photos', \App\Http\Controllers\Admin\EventPhotoController::class)
         ->only('destroy');
 
@@ -124,5 +133,3 @@ Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function() {
 //Route::match(['post', 'put'], '/teste-match', fn() => 'Rota Match');
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

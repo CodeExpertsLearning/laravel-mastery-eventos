@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
 use App\Http\Requests\EventRequest;
 
 class EventController extends Controller
@@ -15,6 +14,8 @@ class EventController extends Controller
     public function __construct(Event $event)
     {
         $this->event = $event;
+
+        $this->middleware('user.can.event.edit')->only('edit', 'update'); //edit e update
     }
 
     public function index()
@@ -37,7 +38,6 @@ class EventController extends Controller
     public function store(EventRequest $request)
     {
         $event = $request->all();
-        $event['slug'] = Str::slug($event['title']);
 
         $event = $this->event->create($event);
         $event->owner()->associate(auth()->user());
