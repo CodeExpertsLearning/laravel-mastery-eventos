@@ -3,18 +3,30 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EventPhotoRequest;
 use Illuminate\Http\Request;
+use App\Models\Event;
+use Illuminate\Support\Facades\Storage;
+use App\Traits\UploadTrait;
 
 class EventPhotoController extends Controller
 {
+    use UploadTrait;
+
+    public function __construct()
+    {
+        $this->middleware('user.can.event.edit');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|string
      */
-    public function index()
+    public function index(Event $event)
     {
-        //
+        return view('admin.events.photos', compact('event'));
     }
 
     /**
@@ -33,9 +45,15 @@ class EventPhotoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EventPhotoRequest $request, Event $event)
     {
-        //
+        $uploadedPhotos = $this->multipleFilesUpload($request->file('photos'), 'events/photos', 'photo');
+
+        $event->photos()->createMany($uploadedPhotos);
+
+        \App\Services\MessageService::addFlash('success', 'Foto(s) adicionadas com sucesso!');
+
+        return redirect()->back();
     }
 
     /**
@@ -78,8 +96,20 @@ class EventPhotoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Event $event, $photo)
     {
-        //
+        $photo = $event->photos()->find($photo);
+
+        if(!$photo) return redirect()->route('admin.events.index');
+
+        if(Storage::disk('public')->exists($photo->photo)) {
+            Storage::disk('public')->delete($photo->photo);
+        }
+
+        $photo->delete();
+
+        \App\Services\MessageService::addFlash('success', 'Foto removida com sucesso!');
+
+        return redirect()->back();
     }
 }

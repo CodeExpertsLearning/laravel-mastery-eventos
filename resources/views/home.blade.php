@@ -3,6 +3,7 @@
 @section('title') Principais Eventos - @endsection
 
 @section('content')
+
     <div class="row">
         <div class="col-12">
             <h2>Eventos</h2>
@@ -26,7 +27,7 @@
                         <p>Evento Organizado por <a href="#">{{$event->owner_name}}</a></p>
 
 
-                        <a href="{{route('event.single', ['slug' => $event->slug])}}" class="btn btn-default">Ver Evento</a>
+                        <a href="{{route('event.single', ['event' => $event->slug])}}" class="btn btn-default">Ver Evento</a>
                     </div>
                 </div>
             </div>

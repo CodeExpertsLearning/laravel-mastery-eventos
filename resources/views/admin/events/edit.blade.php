@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-12">
 
-            <form action="{{route('admin.events.update', ['event' => $event->id])}}" method="post">
+            <form action="{{route('admin.events.update', ['event' => $event->id])}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -66,6 +66,53 @@
                         {{$message}}
                     </div>
                     @enderror
+
+                </div>
+
+                <div class="form-group my-5">
+                    <div class="row">
+                        <div class="col-12">
+                            Banner Evento
+                            <hr>
+                        </div>
+
+                        <div class="col-4">
+
+                            <img src="{{$event->banner ? asset('storage/' . $event->banner) : 'https://via.placeholder.com/1024x480.png/002244?text=Sem+Imagem'}}"
+                                 alt="Banner do Evento {{$event->title}}"
+                                 class="img-fluid">
+                        </div>
+
+                        <div class="col-8">
+                            <label>Carregar um Banner pro Evento</label>
+                            <input type="file" name="banner" class="form-control @error('banner') is-invalid @enderror">
+
+                            @error('banner')
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                            @enderror
+                        </div>
+
+
+                        <div class="col-12">
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Quais Categorias o Evento Pertence</label>
+
+                    <select class="form-control" multiple name="categories[]">
+                        @foreach($categories as $category)
+                            <option value="{{$category->id}}"
+                                @if($event->categories->contains($category))
+                                    selected
+                                @endif
+                            >{{$category->name}}</option>
+                        @endforeach
+                    </select>
 
                 </div>
 

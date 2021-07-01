@@ -27,7 +27,7 @@
     <div class="row">
         <div class="col-12">
 
-            <form action="{{route('admin.events.store')}}" method="post">
+            <form action="{{route('admin.events.store')}}" method="post" enctype="multipart/form-data">
                 @csrf
 
                 <div class="form-group">
@@ -78,6 +78,28 @@
                         {{$message}}
                     </div>
                     @enderror
+
+                </div>
+
+                <div class="form-group">
+                    <label>Carregar um Banner pro Evento</label>
+                    <input type="file" name="banner" class="form-control @error('banner') is-invalid @enderror">
+
+                    @error('banner')
+                    <div class="invalid-feedback">
+                        {{$message}}
+                    </div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label>Quais Categorias o Evento Pertence</label>
+
+                    <select class="form-control" multiple name="categories[]">
+                        @foreach($categories as $category)
+                            <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endforeach
+                    </select>
 
                 </div>
 
