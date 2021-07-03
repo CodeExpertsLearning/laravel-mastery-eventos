@@ -15,7 +15,8 @@
         @forelse($events as $event)
             <div class="col-4">
                 <div class="card">
-                    <img src="https://via.placeholder.com/1024x480.png/002244?text=Sem+Imagem" alt="" class="card-img-top">
+
+                    <img src="{{$event->banner ? asset('storage/' . $event->banner) :'https://via.placeholder.com/1024x480.png/002244?text=Sem+Imagem' }}" alt="" class="card-img-top">
 
                     <div class="card-body">
                         <h5 class="card-title">{{$event->title}}</h5>
